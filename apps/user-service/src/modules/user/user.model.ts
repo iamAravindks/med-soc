@@ -10,8 +10,8 @@ type IUser = {
   bio: string;
   status: string;
   imageUrl: string;
-  passwordResetToken: string;
-  passwordTokenExpires: Date;
+  passwordResetToken?: string;
+  passwordTokenExpires?: Date;
 } & Record<"createdAt" | "updatedAt", Readonly<Date>>;
 
 export interface IUserDocument extends IUser, Document {

@@ -10,6 +10,7 @@ import {
 import path from "path";
 import { authDirectiveTransformer } from "../libs/directives/auth.directive";
 import { TModule } from "../libs/types";
+import AuthDataSource from "./auth/auth.datasource";
 import HelloDataSource from "./hello/hello.datasource";
 import UserDataSource from "./user/user.datasource";
 
@@ -28,6 +29,7 @@ export const Modules: TModule = {
   dataSources: {
     helloDataSource: new HelloDataSource(),
     userDataSource: new UserDataSource(),
+    authDataSource: new AuthDataSource(),
   },
   schemas: cacheDirectiveTransformer(
     authDirectiveTransformer(

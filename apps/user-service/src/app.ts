@@ -81,7 +81,7 @@ import { Modules } from "./modules";
           : payload.req?.headers?.authorization?.split(" ")[1] || null;
 
         return {
-          accessToken: payload.req?.headers?.authorization?.split(" ")[1],
+          accessToken: payload.req?.headers?.authorization,
           isMHAdmin,
           dataSources: Modules.dataSources,
           cacheContext: {

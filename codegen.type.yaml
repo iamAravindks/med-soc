@@ -28,3 +28,5 @@ generates:
       scalars:
         DateTime: Date
         EmailAddress: string
+      mappers:
+        Post: ../../../modules/post/post.model#IPostDocument

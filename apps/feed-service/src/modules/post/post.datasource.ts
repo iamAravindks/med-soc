@@ -1,21 +1,20 @@
 import { getSearchRegex, parseQuery } from "@hubspire/cache-directive";
 import { GraphQLError } from "graphql";
 import { get, omit, set, size } from "lodash";
-import mongoose, { PipelineStage } from "mongoose";
+import { PipelineStage } from "mongoose";
 import {
-  CreateUserInput,
-  QueryGetAllUserArgs,
-  QueryGetAllUserCountArgs,
-  QueryGetOneUserArgs,
-  UpdateUserInput,
+  CreatePostInput,
+  QueryGetAllPostArgs,
+  QueryGetAllPostCountArgs,
+  QueryGetOnePostArgs,
+  UpdatePostInput,
 } from "../../libs/types";
-import { getUserFromToken } from "../../utils/Helper";
-import { UserModel } from "./user.model";
+import { PostModel } from "./post.model";
 
-export default class UserDataSource {
-  private readonly model = UserModel;
+export default class PostDataSource {
+  private readonly model = PostModel;
 
-  async getAllUser(args: QueryGetAllUserArgs) {
+  async getAllPost(args: QueryGetAllPostArgs) {
     const pipelines: PipelineStage[] = [];
     const limit = Number(args.limit) || 10;
     const offset = Number(args.offset) || 0;
@@ -32,14 +31,9 @@ export default class UserDataSource {
         },
       });
     }
-    pipelines.push(
-      {
-        $match: parseQuery(args.filter),
-      },
-      {
-        $project: { password: 0, passwordToken: 0, passwordTokenExpires: 0 },
-      }
-    );
+    pipelines.push({
+      $match: parseQuery(args.filter),
+    });
     size(args.search?.trim()) <= 2 &&
       pipelines.push({ $sort: args.sort || { createdAt: -1 } });
     pipelines.push({ $skip: offset });
@@ -48,7 +42,7 @@ export default class UserDataSource {
     return this.model.aggregate(pipelines);
   }
 
-  async getAllUserCount(args: QueryGetAllUserCountArgs) {
+  async getAllPostCount(args: QueryGetAllPostCountArgs) {
     const pipelines: PipelineStage[] = [];
 
     if (size(args.search?.trim()) > 2) {
@@ -71,42 +65,33 @@ export default class UserDataSource {
     return (await this.model.aggregate(pipelines))[0]?.totalCount || 0;
   }
 
-  async getUserById(_id: string) {
+  async getPostById(_id: string) {
     return this.model.findById(_id).lean();
   }
 
-  async getOneUser(args: QueryGetOneUserArgs) {
+  async getOnePost(args: QueryGetOnePostArgs) {
     return this.model.findOne(args.filter).sort(args.sort).lean();
   }
 
-  async createUser(data: CreateUserInput) {
-    const user = new this.model({ ...data });
-    return user.save();
+  async createPost(data: CreatePostInput) {
+    const post = new this.model({ ...data });
+    return post.save();
   }
 
-  async updateUser(data: UpdateUserInput) {
-    const user = await this.model.findById(data._id);
-    if (!user) throw new GraphQLError("user not found");
+  async updatePost(data: UpdatePostInput) {
+    const post = await this.model.findById(data._id);
+    if (!post) throw new GraphQLError("post not found");
 
-    for (const field in omit(data, "_id")) set(user, field, get(data, field));
+    for (const field in omit(data, "_id")) set(post, field, get(data, field));
 
-    return user.save();
+    return post.save();
   }
 
-  async deleteUser(_id: string) {
-    const user = await this.model.findById(_id);
-    if (!user) throw new GraphQLError("user not found");
+  async deletePost(_id: string) {
+    const post = await this.model.findById(_id);
+    if (!post) throw new GraphQLError("post not found");
 
     await this.model.deleteOne({ _id });
-    return user;
-  }
-
-  async getCurrentUser(token: string) {
-    const userId = await getUserFromToken(token);
-
-    const user = await this.model
-      .findById(new mongoose.Types.ObjectId(userId))
-      .select("-password -passwordResetToken -passwordResetTokenExpires");
-    return user;
+    return post;
   }
 }

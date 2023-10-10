@@ -1,5 +1,3 @@
-/* eslint-disable prettier/prettier */
-
 import { MutationCreateUserArgs, QueryLoginArgs } from "../../libs/types";
 import { loginSchema, userCreateSchema, userUpdateSchema } from "./joi.schema";
 

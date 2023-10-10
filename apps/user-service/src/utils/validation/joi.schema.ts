@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import Joi from "joi";
 
 export const loginSchema = Joi.object({

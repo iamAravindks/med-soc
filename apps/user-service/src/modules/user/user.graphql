@@ -55,6 +55,8 @@ extend type Query {
     @isMHAdmin
     @cacheSet(type: "getUser", identifier: "_id")
   getAllUserCount(search: String, filter: JSON): Int! @isMHAdmin
+
+  current_user: User @cacheSet(type: "getUser", identifier: "_id")
 }
 
 extend type Mutation {

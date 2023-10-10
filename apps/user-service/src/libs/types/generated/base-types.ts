@@ -23,6 +23,13 @@ export type Scalars = {
   _FieldSet: { input: any; output: any; }
 };
 
+export type AuthData = {
+  __typename?: 'AuthData';
+  refreshToken?: Maybe<FieldWrapper<Scalars['String']['output']>>;
+  token: FieldWrapper<Scalars['String']['output']>;
+  userId: FieldWrapper<Scalars['String']['output']>;
+};
+
 export type CachePurgeInput = {
   identifier?: InputMaybe<Scalars['String']['input']>;
   types: Array<Scalars['String']['input']>;
@@ -41,6 +48,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createUser: FieldWrapper<User>;
   deleteUser: FieldWrapper<User>;
+  resetPassword: FieldWrapper<User>;
   updateUser: FieldWrapper<User>;
 };
 
@@ -55,6 +63,12 @@ export type MutationDeleteUserArgs = {
 };
 
 
+export type MutationResetPasswordArgs = {
+  password?: InputMaybe<Scalars['String']['input']>;
+  resetToken?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type MutationUpdateUserArgs = {
   data: UpdateUserInput;
 };
@@ -62,21 +76,23 @@ export type MutationUpdateUserArgs = {
 export type Post = {
   __typename?: 'Post';
   _id: FieldWrapper<Scalars['ID']['output']>;
-  content?: Maybe<FieldWrapper<Scalars['String']['output']>>;
-  createdAt?: Maybe<FieldWrapper<Scalars['DateTime']['output']>>;
-  creator?: Maybe<FieldWrapper<Scalars['ID']['output']>>;
-  imageUrl?: Maybe<FieldWrapper<Scalars['String']['output']>>;
-  title?: Maybe<FieldWrapper<Scalars['String']['output']>>;
-  updatedAt?: Maybe<FieldWrapper<Scalars['DateTime']['output']>>;
 };
 
 export type Query = {
   __typename?: 'Query';
+  current_user?: Maybe<FieldWrapper<User>>;
+  forgotPassword: FieldWrapper<Scalars['String']['output']>;
   getAllUser: Array<Maybe<FieldWrapper<User>>>;
   getAllUserCount: FieldWrapper<Scalars['Int']['output']>;
   getOneUser?: Maybe<FieldWrapper<User>>;
   getUserById?: Maybe<FieldWrapper<User>>;
+  login: FieldWrapper<AuthData>;
   userServiceHello: FieldWrapper<Scalars['String']['output']>;
+};
+
+
+export type QueryForgotPasswordArgs = {
+  email: Scalars['String']['input'];
 };
 
 
@@ -103,6 +119,12 @@ export type QueryGetOneUserArgs = {
 
 export type QueryGetUserByIdArgs = {
   _id: Scalars['ID']['input'];
+};
+
+
+export type QueryLoginArgs = {
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
 
 export type UpdateUserInput = {
@@ -229,8 +251,9 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
-  CachePurgeInput: CachePurgeInput;
+  AuthData: ResolverTypeWrapper<AuthData>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  CachePurgeInput: CachePurgeInput;
   CreateUserInput: CreateUserInput;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']['output']>;
@@ -247,8 +270,9 @@ export type ResolversTypes = ResolversObject<{
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
-  CachePurgeInput: CachePurgeInput;
+  AuthData: AuthData;
   String: Scalars['String']['output'];
+  CachePurgeInput: CachePurgeInput;
   CreateUserInput: CreateUserInput;
   DateTime: Scalars['DateTime']['output'];
   EmailAddress: Scalars['EmailAddress']['output'];
@@ -281,6 +305,13 @@ export type IsMhAdminDirectiveArgs = { };
 
 export type IsMhAdminDirectiveResolver<Result, Parent, ContextType = UserServiceContext, Args = IsMhAdminDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
+export type AuthDataResolvers<ContextType = UserServiceContext, ParentType extends ResolversParentTypes['AuthData'] = ResolversParentTypes['AuthData']> = ResolversObject<{
+  refreshToken?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
   name: 'DateTime';
 }
@@ -296,26 +327,24 @@ export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 export type MutationResolvers<ContextType = UserServiceContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   createUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'data'>>;
   deleteUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationDeleteUserArgs, '_id'>>;
+  resetPassword?: Resolver<ResolversTypes['User'], ParentType, ContextType, Partial<MutationResetPasswordArgs>>;
   updateUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'data'>>;
 }>;
 
 export type PostResolvers<ContextType = UserServiceContext, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = ResolversObject<{
   __resolveReference?: ReferenceResolver<Maybe<ResolversTypes['Post']>, { __typename: 'Post' } & GraphQLRecursivePick<UnwrappedObject<ParentType>, {"_id":true}>, ContextType>;
   _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  content?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
-  creator?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
-  imageUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type QueryResolvers<ContextType = UserServiceContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  current_user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  forgotPassword?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<QueryForgotPasswordArgs, 'email'>>;
   getAllUser?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType, Partial<QueryGetAllUserArgs>>;
   getAllUserCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<QueryGetAllUserCountArgs>>;
   getOneUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, Partial<QueryGetOneUserArgs>>;
   getUserById?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByIdArgs, '_id'>>;
+  login?: Resolver<ResolversTypes['AuthData'], ParentType, ContextType, RequireFields<QueryLoginArgs, 'email' | 'password'>>;
   userServiceHello?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 }>;
 
@@ -337,6 +366,7 @@ export type UserResolvers<ContextType = UserServiceContext, ParentType extends R
 }>;
 
 export type Resolvers<ContextType = UserServiceContext> = ResolversObject<{
+  AuthData?: AuthDataResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   EmailAddress?: GraphQLScalarType;
   JSON?: GraphQLScalarType;

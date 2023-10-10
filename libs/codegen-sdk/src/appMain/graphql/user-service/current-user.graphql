@@ -1,0 +1,21 @@
+query Current_user {
+  current_user {
+    _id
+    email
+    name
+    bio
+    status
+    imageUrl
+    createdAt
+    updatedAt
+    posts {
+      _id
+      createdAt
+      updatedAt
+      title
+      content
+      imageUrl
+      creator
+    }
+  }
+}

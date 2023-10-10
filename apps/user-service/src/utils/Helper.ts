@@ -22,6 +22,7 @@ export const getUserFromToken = async (token: string) => {
 
     return user._id;
   } catch (error) {
+    console.log(error);
     throw new GQLError("verification failed", "VERIFICATION_FAILED", 400);
   }
 };

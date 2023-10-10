@@ -10,6 +10,10 @@ export default {
       context.dataSources.userDataSource.getOneUser(args),
     getAllUserCount: (parent, args, context, info) =>
       context.dataSources.userDataSource.getAllUserCount(args),
+    current_user: (parent, args, context, info) =>
+      context.dataSources.userDataSource.getCurrentUser(
+        context.accessToken as string
+      ),
   },
   Mutation: {
     createUser: (parent, args, context, info) =>

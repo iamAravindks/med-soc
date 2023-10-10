@@ -11,6 +11,7 @@ import path from "path";
 import { authDirectiveTransformer } from "../libs/directives/auth.directive";
 import { TModule } from "../libs/types";
 import HelloDataSource from "./hello/hello.datasource";
+import PostDataSource from "./post/post.datasource";
 
 const typeDefs = mergeTypeDefs(
   loadFilesSync(path.resolve(__dirname + "/**/*.graphql"), {
@@ -26,6 +27,7 @@ const resolvers = mergeResolvers(
 export const Modules: TModule = {
   dataSources: {
     helloDataSource: new HelloDataSource(),
+    postDataSource: new PostDataSource(),
   },
   schemas: cacheDirectiveTransformer(
     authDirectiveTransformer(
