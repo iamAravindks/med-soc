@@ -1,0 +1,33 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.0"
+    import: ["@key", "@shareable", "@external"]
+  )
+
+directive @isMHAdmin on OBJECT | FIELD_DEFINITION | INTERFACE | UNION
+
+scalar JSON
+scalar DateTime
+scalar EmailAddress
+
+directive @cacheSet(
+  type: String!
+  identifier: String!
+  maxAge: Int = 900
+) on FIELD_DEFINITION
+
+input CachePurgeInput {
+  types: [String!]!
+  identifier: String
+}
+directive @cachePurge(payloads: [CachePurgeInput!]!) on FIELD_DEFINITION
+
+extend type Post @key(fields: "_id") {
+  _id: ID!
+  createdAt: DateTime
+  updatedAt: DateTime
+  title: String
+  content: String
+  imageUrl: String
+  creator: ID
+}
