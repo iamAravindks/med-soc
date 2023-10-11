@@ -18,7 +18,8 @@
     "@apollo/gateway": "^2.5.5",
     "@apollo/server": "^4.9.4",
     "graphql": "^16.8.1",
-    "make-fetch-happen": "^13.0.0"
+    "make-fetch-happen": "^13.0.0",
+    "@med-soc/shared-backend":"^1.0.0"
   },
   "devDependencies": {
     "@types/make-fetch-happen": "^10.0.2"

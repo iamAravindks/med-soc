@@ -1,11 +1,11 @@
 {
-  "name": "codegen-sdk",
+  "name": "@med-soc/codegen-sdk",
   "version": "1.0.0",
   "description": "A node based library designed for npm workspace",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "private": true,
   "scripts": {
-    "build": "rimraf dist && node ./esbuild.config.js && tsc --emitDeclarationOnly --outDir dist"
+    "build": "rimraf dist &&  tsc --emitDeclarationOnly --outDir dist "
   }
 }

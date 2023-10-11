@@ -25,6 +25,7 @@
     "graphql-scalars": "^1.22.2",
     "mongodb-memory-server": "^9.0.0",
     "mongoose": "^7.6.0",
-    "redis-memory-server": "^0.7.0"
+    "redis-memory-server": "^0.7.0",
+    "@med-soc/shared-backend" : "1.0.0"
   }
 }

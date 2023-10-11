@@ -32,13 +32,6 @@ export type CachePurgeInput = {
   types: Array<Scalars['String']['input']>;
 };
 
-export type CreatePostInput = {
-  content: Scalars['String']['input'];
-  creator: Scalars['ID']['input'];
-  imageUrl?: InputMaybe<Scalars['String']['input']>;
-  title: Scalars['String']['input'];
-};
-
 export type CreateUserInput = {
   bio?: InputMaybe<Scalars['String']['input']>;
   email: Scalars['EmailAddress']['input'];
@@ -50,28 +43,15 @@ export type CreateUserInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createPost: Post;
   createUser: User;
-  deletePost: Post;
   deleteUser: User;
   resetPassword: User;
-  updatePost: Post;
   updateUser: User;
-};
-
-
-export type MutationCreatePostArgs = {
-  data: CreatePostInput;
 };
 
 
 export type MutationCreateUserArgs = {
   data: CreateUserInput;
-};
-
-
-export type MutationDeletePostArgs = {
-  _id: Scalars['ID']['input'];
 };
 
 
@@ -86,11 +66,6 @@ export type MutationResetPasswordArgs = {
 };
 
 
-export type MutationUpdatePostArgs = {
-  data: UpdatePostInput;
-};
-
-
 export type MutationUpdateUserArgs = {
   data: UpdateUserInput;
 };
@@ -98,26 +73,15 @@ export type MutationUpdateUserArgs = {
 export type Post = {
   __typename?: 'Post';
   _id: Scalars['ID']['output'];
-  content?: Maybe<Scalars['String']['output']>;
-  createdAt?: Maybe<Scalars['DateTime']['output']>;
-  creator?: Maybe<Scalars['ID']['output']>;
-  imageUrl?: Maybe<Scalars['String']['output']>;
-  title?: Maybe<Scalars['String']['output']>;
-  updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type Query = {
   __typename?: 'Query';
   current_user?: Maybe<User>;
-  feedServiceHello: Scalars['String']['output'];
   forgotPassword: Scalars['String']['output'];
-  getAllPost: Array<Maybe<Post>>;
-  getAllPostCount: Scalars['Int']['output'];
   getAllUser: Array<Maybe<User>>;
   getAllUserCount: Scalars['Int']['output'];
-  getOnePost?: Maybe<Post>;
   getOneUser?: Maybe<User>;
-  getPostById?: Maybe<Post>;
   getUserById?: Maybe<User>;
   login: AuthData;
   userServiceHello: Scalars['String']['output'];
@@ -126,21 +90,6 @@ export type Query = {
 
 export type QueryForgotPasswordArgs = {
   email: Scalars['String']['input'];
-};
-
-
-export type QueryGetAllPostArgs = {
-  filter?: InputMaybe<Scalars['JSON']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  search?: InputMaybe<Scalars['String']['input']>;
-  sort?: InputMaybe<Scalars['JSON']['input']>;
-};
-
-
-export type QueryGetAllPostCountArgs = {
-  filter?: InputMaybe<Scalars['JSON']['input']>;
-  search?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -159,20 +108,9 @@ export type QueryGetAllUserCountArgs = {
 };
 
 
-export type QueryGetOnePostArgs = {
-  filter?: InputMaybe<Scalars['JSON']['input']>;
-  sort?: InputMaybe<Scalars['JSON']['input']>;
-};
-
-
 export type QueryGetOneUserArgs = {
   filter?: InputMaybe<Scalars['JSON']['input']>;
   sort?: InputMaybe<Scalars['JSON']['input']>;
-};
-
-
-export type QueryGetPostByIdArgs = {
-  _id: Scalars['ID']['input'];
 };
 
 
@@ -184,14 +122,6 @@ export type QueryGetUserByIdArgs = {
 export type QueryLoginArgs = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
-};
-
-export type UpdatePostInput = {
-  _id: Scalars['ID']['input'];
-  content?: InputMaybe<Scalars['String']['input']>;
-  creator?: InputMaybe<Scalars['ID']['input']>;
-  imageUrl?: InputMaybe<Scalars['String']['input']>;
-  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateUserInput = {
@@ -234,10 +164,10 @@ export type UserPostsArgs = {
 export type Current_UserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type Current_UserQuery = { __typename?: 'Query', current_user?: { __typename?: 'User', _id: string, email?: any | null, name?: string | null, bio?: string | null, status?: string | null, imageUrl?: string | null, createdAt?: any | null, updatedAt?: any | null, posts?: Array<{ __typename?: 'Post', _id: string, createdAt?: any | null, updatedAt?: any | null, title?: string | null, content?: string | null, imageUrl?: string | null, creator?: string | null } | null> | null } | null };
+export type Current_UserQuery = { __typename?: 'Query', current_user?: { __typename?: 'User', _id: string, email?: any | null, name?: string | null, bio?: string | null, status?: string | null, imageUrl?: string | null, createdAt?: any | null, updatedAt?: any | null } | null };
 
 
-export const Current_UserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Current_user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"current_user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"bio"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"imageUrl"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"posts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_id"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"imageUrl"}},{"kind":"Field","name":{"kind":"Name","value":"creator"}}]}}]}}]}}]} as unknown as DocumentNode;
+export const Current_UserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Current_user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"current_user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"bio"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"imageUrl"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode;
 
 export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
 

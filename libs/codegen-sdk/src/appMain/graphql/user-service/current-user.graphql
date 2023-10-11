@@ -8,14 +8,5 @@ query Current_user {
     imageUrl
     createdAt
     updatedAt
-    posts {
-      _id
-      createdAt
-      updatedAt
-      title
-      content
-      imageUrl
-      creator
-    }
   }
 }
