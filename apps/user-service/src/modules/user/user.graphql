@@ -57,6 +57,8 @@ extend type Query {
   getAllUserCount(search: String, filter: JSON): Int! @isMHAdmin
 
   current_user: User @cacheSet(type: "getUser", identifier: "_id")
+
+  getProfile: User @auth @cacheSet(type: "profile", identifier: "_id")
 }
 
 extend type Mutation {
@@ -68,7 +70,10 @@ extend type Mutation {
     @isMHAdmin
     @cachePurge(
       payloads: [
-        { types: ["getUser", "getAllUsers", "getUserById"], identifier: "_id" }
+        {
+          types: ["getUser", "getAllUsers", "getUserById", "profile"]
+          identifier: "_id"
+        }
       ]
     )
 
@@ -76,7 +81,10 @@ extend type Mutation {
     @isMHAdmin
     @cachePurge(
       payloads: [
-        { types: ["getUser", "getAllUsers", "getUserById"], identifier: "_id" }
+        {
+          types: ["getUser", "getAllUsers", "getUserById", "profile"]
+          identifier: "_id"
+        }
       ]
     )
 }

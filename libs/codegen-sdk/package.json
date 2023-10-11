@@ -6,6 +6,6 @@
   "types": "dist/index.d.ts",
   "private": true,
   "scripts": {
-    "build": "rimraf dist &&  tsc --emitDeclarationOnly --outDir dist "
+    "build": "rimraf dist &&  tsc  --outDir dist "
   }
 }

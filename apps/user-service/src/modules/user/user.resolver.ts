@@ -14,6 +14,10 @@ export default {
       context.dataSources.userDataSource.getCurrentUser(
         context.accessToken as string
       ),
+    getProfile: (parent, args, context, info) => {
+      console.log("resolver", context.accessToken);
+      return context.dataSources.userDataSource.getProfile(args, context);
+    },
   },
   Mutation: {
     createUser: (parent, args, context, info) =>

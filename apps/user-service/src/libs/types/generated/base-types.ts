@@ -85,6 +85,7 @@ export type Query = {
   getAllUser: Array<Maybe<FieldWrapper<User>>>;
   getAllUserCount: FieldWrapper<Scalars['Int']['output']>;
   getOneUser?: Maybe<FieldWrapper<User>>;
+  getProfile?: Maybe<FieldWrapper<User>>;
   getUserById?: Maybe<FieldWrapper<User>>;
   login: FieldWrapper<AuthData>;
   userServiceHello: FieldWrapper<Scalars['String']['output']>;
@@ -287,6 +288,10 @@ export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean']['output'];
 }>;
 
+export type AuthDirectiveArgs = { };
+
+export type AuthDirectiveResolver<Result, Parent, ContextType = UserServiceContext, Args = AuthDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
 export type CachePurgeDirectiveArgs = {
   payloads: Array<CachePurgeInput>;
 };
@@ -343,6 +348,7 @@ export type QueryResolvers<ContextType = UserServiceContext, ParentType extends 
   getAllUser?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType, Partial<QueryGetAllUserArgs>>;
   getAllUserCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<QueryGetAllUserCountArgs>>;
   getOneUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, Partial<QueryGetOneUserArgs>>;
+  getProfile?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   getUserById?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByIdArgs, '_id'>>;
   login?: Resolver<ResolversTypes['AuthData'], ParentType, ContextType, RequireFields<QueryLoginArgs, 'email' | 'password'>>;
   userServiceHello?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -377,6 +383,7 @@ export type Resolvers<ContextType = UserServiceContext> = ResolversObject<{
 }>;
 
 export type DirectiveResolvers<ContextType = UserServiceContext> = ResolversObject<{
+  auth?: AuthDirectiveResolver<any, any, ContextType>;
   cachePurge?: CachePurgeDirectiveResolver<any, any, ContextType>;
   cacheSet?: CacheSetDirectiveResolver<any, any, ContextType>;
   isMHAdmin?: IsMhAdminDirectiveResolver<any, any, ContextType>;

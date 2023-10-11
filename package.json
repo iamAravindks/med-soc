@@ -12,7 +12,7 @@
   },
   "scripts": {
     "nx": "nx",
-    "nx:w": "nodemon --exec nx --ext ts  ",
+    "nx:w": "nodemon --exec nx  ",
     "postinstall": "husky install",
     "clean": "rimraf ./apps/**/dist ./libs/**/dist ./apps/**/coverage ./apps/**/node_modules ./libs/**/node_modules node_modules",
     "commit": "git-cz",

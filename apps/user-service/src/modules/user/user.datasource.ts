@@ -8,6 +8,7 @@ import {
   QueryGetAllUserCountArgs,
   QueryGetOneUserArgs,
   UpdateUserInput,
+  UserServiceContext,
 } from "../../libs/types";
 import { getUserFromToken } from "../../utils/Helper";
 import { UserModel } from "./user.model";
@@ -102,8 +103,16 @@ export default class UserDataSource {
   }
 
   async getCurrentUser(token: string) {
-    const userId = await getUserFromToken(token);
+    console.log("from ", token);
+    const userId = await getUserFromToken(token.replace("Bearer ", ""));
+    const user = await this.model
+      .findById(new mongoose.Types.ObjectId(userId))
+      .select("-password -passwordResetToken -passwordResetTokenExpires");
+    return user;
+  }
 
+  async getProfile(args: any, context: UserServiceContext) {
+    const userId = context.userId;
     const user = await this.model
       .findById(new mongoose.Types.ObjectId(userId))
       .select("-password -passwordResetToken -passwordResetTokenExpires");

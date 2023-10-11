@@ -21,7 +21,7 @@ const errorHandler: SdkFunctionWrapper = async <T>(
 };
 
 export const appMainSDK = (mode: AccessMode, value: string) => {
-  const client = new GraphQLClient(String(process.env.APP_MAIN_GATEWAY_URL), {
+  const client = new GraphQLClient(String(" http://localhost:8080/app-main"), {
     headers:
       mode === AccessMode.MhAdmin
         ? {

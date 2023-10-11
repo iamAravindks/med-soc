@@ -40,10 +40,14 @@ export function authDirectiveTransformer(schema: GraphQLSchema) {
 
         fieldConfig.resolve = async function (source, args, context, info) {
           if (context.isMHAdmin) return resolve(source, args, context, info);
+          console.log("token is ", context.accessToken);
           if (context.accessToken) {
             try {
               const { sdk } = appMainSDK(AccessMode.User, context.accessToken);
+              console.log(context.accessToken);
+              console.log(sdk);
               const { current_user: user } = await sdk.Current_user();
+              console.log("the user", user);
               if (user && user.status && user._id) {
                 set(context, "userId", user._id);
                 return resolve(source, args, context, info);
