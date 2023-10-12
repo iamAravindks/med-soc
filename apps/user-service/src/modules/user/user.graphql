@@ -42,7 +42,7 @@ input UpdateUserInput {
 
 extend type Query {
   getUserById(_id: ID!): User
-    @isMHAdmin
+    @auth
     @cacheSet(type: "getUserById", identifier: "_id")
   getAllUser(
     search: String
@@ -52,13 +52,14 @@ extend type Query {
     offset: Int
   ): [User]! @isMHAdmin @cacheSet(type: "getAllUsers", identifier: "_id")
   getOneUser(filter: JSON, sort: JSON): User
-    @isMHAdmin
+    @auth
     @cacheSet(type: "getUser", identifier: "_id")
   getAllUserCount(search: String, filter: JSON): Int! @isMHAdmin
 
-  current_user: User @cacheSet(type: "getUser", identifier: "_id")
+  current_user: User
+  # @cacheSet(type: "getUser", identifier: "_id")
 
-  getProfile: User @auth @cacheSet(type: "profile", identifier: "_id")
+  getProfile: User @auth @cacheSet(type: "getProfile", identifier: "_id")
 }
 
 extend type Mutation {
@@ -67,11 +68,10 @@ extend type Mutation {
     @cachePurge(payloads: [{ types: ["getUser", "getAllUsers"] }])
 
   updateUser(data: UpdateUserInput!): User!
-    @isMHAdmin
     @cachePurge(
       payloads: [
         {
-          types: ["getUser", "getAllUsers", "getUserById", "profile"]
+          types: ["getUser", "getAllUsers", "getUserById", "getProfile"]
           identifier: "_id"
         }
       ]
@@ -82,7 +82,7 @@ extend type Mutation {
     @cachePurge(
       payloads: [
         {
-          types: ["getUser", "getAllUsers", "getUserById", "profile"]
+          types: ["getUser", "getAllUsers", "getUserById", "getProfile"]
           identifier: "_id"
         }
       ]

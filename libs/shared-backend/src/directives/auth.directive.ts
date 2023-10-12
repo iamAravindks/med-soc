@@ -45,10 +45,9 @@ export function authDirectiveTransformer(schema: GraphQLSchema) {
             try {
               const { sdk } = appMainSDK(AccessMode.User, context.accessToken);
               console.log(context.accessToken);
-              console.log(sdk);
               const { current_user: user } = await sdk.Current_user();
               console.log("the user", user);
-              if (user && user.status && user._id) {
+              if (user && user._id) {
                 set(context, "userId", user._id);
                 return resolve(source, args, context, info);
               }

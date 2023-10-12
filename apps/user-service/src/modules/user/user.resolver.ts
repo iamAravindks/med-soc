@@ -15,7 +15,7 @@ export default {
         context.accessToken as string
       ),
     getProfile: (parent, args, context, info) => {
-      console.log("resolver", context.accessToken);
+      console.log("resolver", context.userId);
       return context.dataSources.userDataSource.getProfile(args, context);
     },
   },
