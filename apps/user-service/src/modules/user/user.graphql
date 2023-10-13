@@ -50,11 +50,11 @@ extend type Query {
     sort: JSON
     limit: Int
     offset: Int
-  ): [User]! @isMHAdmin @cacheSet(type: "getAllUsers", identifier: "_id")
+  ): [User]! @cacheSet(type: "getAllUsers", identifier: "_id")
   getOneUser(filter: JSON, sort: JSON): User
     @auth
     @cacheSet(type: "getUser", identifier: "_id")
-  getAllUserCount(search: String, filter: JSON): Int! @isMHAdmin
+  getAllUserCount(search: String, filter: JSON): Int!
 
   current_user: User
   # @cacheSet(type: "getUser", identifier: "_id")
@@ -64,7 +64,6 @@ extend type Query {
 
 extend type Mutation {
   createUser(data: CreateUserInput!): User!
-    @isMHAdmin
     @cachePurge(payloads: [{ types: ["getUser", "getAllUsers"] }])
 
   updateUser(data: UpdateUserInput!): User!
@@ -78,7 +77,6 @@ extend type Mutation {
     )
 
   deleteUser(_id: ID!): User!
-    @isMHAdmin
     @cachePurge(
       payloads: [
         {

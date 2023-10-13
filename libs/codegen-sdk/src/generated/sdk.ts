@@ -232,12 +232,24 @@ export type UserPostsArgs = {
   sort?: InputMaybe<Scalars['JSON']['input']>;
 };
 
+export type GetAllPostQueryVariables = Exact<{
+  search?: InputMaybe<Scalars['String']['input']>;
+  filter?: InputMaybe<Scalars['JSON']['input']>;
+  sort?: InputMaybe<Scalars['JSON']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetAllPostQuery = { __typename?: 'Query', getAllPost: Array<{ __typename?: 'Post', _id: string, createdAt?: any | null, updatedAt?: any | null, title?: string | null, content?: string | null, imageUrl?: string | null, creator?: string | null } | null> };
+
 export type Current_UserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type Current_UserQuery = { __typename?: 'Query', current_user?: { __typename?: 'User', _id: string, email?: any | null, name?: string | null, bio?: string | null, status?: string | null, imageUrl?: string | null, createdAt?: any | null, updatedAt?: any | null } | null };
 
 
+export const GetAllPostDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllPost"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"search"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filter"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"JSON"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sort"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"JSON"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"offset"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getAllPost"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"search"},"value":{"kind":"Variable","name":{"kind":"Name","value":"search"}}},{"kind":"Argument","name":{"kind":"Name","value":"filter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filter"}}},{"kind":"Argument","name":{"kind":"Name","value":"sort"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sort"}}},{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"offset"},"value":{"kind":"Variable","name":{"kind":"Name","value":"offset"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_id"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"imageUrl"}},{"kind":"Field","name":{"kind":"Name","value":"creator"}}]}}]}}]} as unknown as DocumentNode;
 export const Current_UserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Current_user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"current_user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"bio"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"imageUrl"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode;
 
 export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
@@ -247,6 +259,9 @@ const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationTy
 
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
+    GetAllPost(variables?: GetAllPostQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetAllPostQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetAllPostQuery>(GetAllPostDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetAllPost', 'query');
+    },
     Current_user(variables?: Current_UserQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<Current_UserQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<Current_UserQuery>(Current_UserDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'Current_user', 'query');
     }

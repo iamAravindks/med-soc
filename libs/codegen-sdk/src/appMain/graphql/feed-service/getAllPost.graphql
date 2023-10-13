@@ -1,0 +1,23 @@
+query GetAllPost(
+  $search: String
+  $filter: JSON
+  $sort: JSON
+  $limit: Int
+  $offset: Int
+) {
+  getAllPost(
+    search: $search
+    filter: $filter
+    sort: $sort
+    limit: $limit
+    offset: $offset
+  ) {
+    _id
+    createdAt
+    updatedAt
+    title
+    content
+    imageUrl
+    creator
+  }
+}

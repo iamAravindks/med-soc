@@ -1,4 +1,5 @@
 import { getSearchRegex, parseQuery } from "@hubspire/cache-directive";
+import { AccessMode, appMainSDK } from "@med-soc/codegen-sdk";
 import { GraphQLError } from "graphql";
 import { get, omit, set, size } from "lodash";
 import mongoose, { PipelineStage } from "mongoose";
@@ -117,5 +118,32 @@ export default class UserDataSource {
       .findById(new mongoose.Types.ObjectId(userId))
       .select("-password -passwordResetToken -passwordResetTokenExpires");
     return user;
+  }
+
+  async getPostsByUser(args: any, context: UserServiceContext) {
+    const { sdk } = appMainSDK(AccessMode.User, context.accessToken as string);
+    const variables: any = {};
+
+    if (args?.limit) {
+      variables.limit = args.limit;
+    } else {
+      variables.limit = 5;
+    }
+
+    if (args?.offset) {
+      variables.offset = args.offset;
+    }
+
+    if (args?.sort) {
+      variables.search = args.sort;
+    }
+
+    if (args?.filter) {
+      variables.filter = args.filter;
+    }
+    console.log(variables);
+    const posts = await sdk.GetAllPost(variables);
+    console.log(posts);
+    return posts.getAllPost;
   }
 }

@@ -31,5 +31,24 @@ export default {
   User: {
     __resolveReference: async (ref, context, info) =>
       ref._id ? context.loaders.userByIdLoader.load(ref._id) : null,
+    posts: async (parent, args, context, info) => {
+      if (!args.filter) {
+        args.filter = { creator: parent._id };
+      } else {
+        args.filter = { ...args.filter, creator: parent._id };
+      }
+      console.log(args);
+      const posts = await context.dataSources.userDataSource.getPostsByUser(
+        args,
+        context
+      );
+      console.log(posts);
+      return posts as any;
+    },
+    // posts: async (parent) =>
+    //   ({
+    //     _typename: "Post",
+    //     creator: parent._id ? parent._id.toString() : null,
+    //   }) as any,
   },
 } as Resolvers;
