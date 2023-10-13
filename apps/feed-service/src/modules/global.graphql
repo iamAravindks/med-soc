@@ -21,3 +21,7 @@ input CachePurgeInput {
   identifier: String
 }
 directive @cachePurge(payloads: [CachePurgeInput!]!) on FIELD_DEFINITION
+
+extend type User @key(fields: "_id") {
+  _id: ID! @external
+}

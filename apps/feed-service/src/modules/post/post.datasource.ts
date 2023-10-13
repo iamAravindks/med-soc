@@ -1,9 +1,11 @@
 import { getSearchRegex, parseQuery } from "@hubspire/cache-directive";
+import { AccessMode, appMainSDK } from "@med-soc/codegen-sdk";
 import { GraphQLError } from "graphql";
 import { get, omit, set, size } from "lodash";
 import { PipelineStage } from "mongoose";
 import {
   CreatePostInput,
+  FeedServiceContext,
   QueryGetAllPostArgs,
   QueryGetAllPostCountArgs,
   QueryGetOnePostArgs,
@@ -93,5 +95,12 @@ export default class PostDataSource {
 
     await this.model.deleteOne({ _id });
     return post;
+  }
+
+  async getAuthor(args: any, context: FeedServiceContext) {
+    const { sdk } = appMainSDK(AccessMode.User, context.accessToken as string);
+    const variables = { id: args._id };
+    const author = await sdk.GetUserById(variables);
+    return author?.getUserById;
   }
 }

@@ -24,5 +24,11 @@ export default {
   Post: {
     __resolveReference: async (ref, context, info) =>
       ref._id ? context.loaders.postByIdLoader.load(ref._id) : null,
+    author: async (parent, args, context) => {
+      return context.dataSources.postDataSource.getAuthor(
+        parent.creator,
+        context
+      ) as any;
+    },
   },
 } as Resolvers;

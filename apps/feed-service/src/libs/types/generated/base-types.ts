@@ -60,6 +60,7 @@ export type MutationUpdatePostArgs = {
 export type Post = {
   __typename?: 'Post';
   _id: FieldWrapper<Scalars['ID']['output']>;
+  author: FieldWrapper<User>;
   content?: Maybe<FieldWrapper<Scalars['String']['output']>>;
   createdAt?: Maybe<FieldWrapper<Scalars['DateTime']['output']>>;
   creator?: Maybe<FieldWrapper<Scalars['ID']['output']>>;
@@ -109,6 +110,11 @@ export type UpdatePostInput = {
   creator?: InputMaybe<Scalars['ID']['input']>;
   imageUrl?: InputMaybe<Scalars['String']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type User = {
+  __typename?: 'User';
+  _id: FieldWrapper<Scalars['ID']['output']>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -210,6 +216,7 @@ export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   UpdatePostInput: UpdatePostInput;
+  User: ResolverTypeWrapper<User>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
 }>;
 
@@ -227,6 +234,7 @@ export type ResolversParentTypes = ResolversObject<{
   Query: {};
   Int: Scalars['Int']['output'];
   UpdatePostInput: UpdatePostInput;
+  User: User;
   Boolean: Scalars['Boolean']['output'];
 }>;
 
@@ -269,6 +277,7 @@ export type MutationResolvers<ContextType = FeedServiceContext, ParentType exten
 export type PostResolvers<ContextType = FeedServiceContext, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = ResolversObject<{
   __resolveReference?: ReferenceResolver<Maybe<ResolversTypes['Post']>, { __typename: 'Post' } & GraphQLRecursivePick<UnwrappedObject<ParentType>, {"_id":true}>, ContextType>;
   _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  author?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   content?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   creator?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
@@ -286,6 +295,12 @@ export type QueryResolvers<ContextType = FeedServiceContext, ParentType extends 
   getPostById?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryGetPostByIdArgs, '_id'>>;
 }>;
 
+export type UserResolvers<ContextType = FeedServiceContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
+  __resolveReference?: ReferenceResolver<Maybe<ResolversTypes['User']>, { __typename: 'User' } & GraphQLRecursivePick<UnwrappedObject<ParentType>, {"_id":true}>, ContextType>;
+
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type Resolvers<ContextType = FeedServiceContext> = ResolversObject<{
   DateTime?: GraphQLScalarType;
   EmailAddress?: GraphQLScalarType;
@@ -293,6 +308,7 @@ export type Resolvers<ContextType = FeedServiceContext> = ResolversObject<{
   Mutation?: MutationResolvers<ContextType>;
   Post?: PostResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  User?: UserResolvers<ContextType>;
 }>;
 
 export type DirectiveResolvers<ContextType = FeedServiceContext> = ResolversObject<{

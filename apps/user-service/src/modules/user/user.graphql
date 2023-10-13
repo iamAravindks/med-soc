@@ -41,9 +41,7 @@ input UpdateUserInput {
 }
 
 extend type Query {
-  getUserById(_id: ID!): User
-    @auth
-    @cacheSet(type: "getUserById", identifier: "_id")
+  getUserById(_id: ID!): User @cacheSet(type: "getUserById", identifier: "_id")
   getAllUser(
     search: String
     filter: JSON
