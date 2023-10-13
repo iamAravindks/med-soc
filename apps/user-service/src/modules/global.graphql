@@ -24,11 +24,5 @@ input CachePurgeInput {
 directive @cachePurge(payloads: [CachePurgeInput!]!) on FIELD_DEFINITION
 
 extend type Post @key(fields: "_id") {
-  _id: ID!
-  # createdAt: DateTime
-  # updatedAt: DateTime
-  # title: String
-  # content: String
-  # imageUrl: String
-  # creator: ID
+  _id: ID! @external
 }

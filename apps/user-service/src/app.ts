@@ -79,7 +79,6 @@ import { Modules } from "./modules";
         const sessionId = isMHAdmin
           ? (payload.req?.headers?.["mh-token"] as string)
           : payload.req?.headers?.authorization || null;
-        console.log(sessionId);
         return {
           accessToken: payload.req?.headers?.authorization,
           isMHAdmin,

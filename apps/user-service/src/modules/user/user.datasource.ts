@@ -103,7 +103,6 @@ export default class UserDataSource {
   }
 
   async getCurrentUser(token: string) {
-    console.log("from ", token);
     const userId = await getUserFromToken(token?.replace("Bearer ", ""));
     const user = await this.model
       .findById(new mongoose.Types.ObjectId(userId))
@@ -113,7 +112,7 @@ export default class UserDataSource {
 
   async getProfile(args: any, context: UserServiceContext) {
     const userId = context.userId;
-    console.log(userId);
+
     const user = await this.model
       .findById(new mongoose.Types.ObjectId(userId))
       .select("-password -passwordResetToken -passwordResetTokenExpires");

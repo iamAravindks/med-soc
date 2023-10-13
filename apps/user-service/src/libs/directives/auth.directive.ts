@@ -50,7 +50,6 @@ export const authDirectiveTransformer = (schema: GraphQLSchema) =>
           info
         ) {
           if (context.isMHAdmin) return resolve(source, args, context, info);
-          console.log("L53", context.accessToken);
           if (context.accessToken) {
             try {
               const user = await getUserFromToken(context.accessToken);
