@@ -13,7 +13,7 @@ export default {
   },
   Mutation: {
     createPost: (parent, args, context, info) =>
-      context.dataSources.postDataSource.createPost(args.data),
+      context.dataSources.postDataSource.createPost(args.data, context),
 
     updatePost: (parent, args, context, info) =>
       context.dataSources.postDataSource.updatePost(args.data),

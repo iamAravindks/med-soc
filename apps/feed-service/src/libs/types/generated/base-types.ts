@@ -1,5 +1,6 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { IPostDocument } from '../../../modules/post/post.model';
+import { ILikeDocument } from '../../../modules/like/like.model';
 import { FeedServiceContext } from '../index';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -28,23 +29,48 @@ export type CachePurgeInput = {
   types: Array<Scalars['String']['input']>;
 };
 
+export type CreateLikeInput = {
+  postId: Array<Scalars['ID']['input']>;
+  userId: Array<Scalars['ID']['input']>;
+};
+
 export type CreatePostInput = {
   content: Scalars['String']['input'];
-  creator: Scalars['ID']['input'];
   imageUrl?: InputMaybe<Scalars['String']['input']>;
   title: Scalars['String']['input'];
 };
 
+export type Like = {
+  __typename?: 'Like';
+  _id: FieldWrapper<Scalars['ID']['output']>;
+  createdAt?: Maybe<FieldWrapper<Scalars['DateTime']['output']>>;
+  postId?: Maybe<FieldWrapper<Scalars['ID']['output']>>;
+  updatedAt?: Maybe<FieldWrapper<Scalars['DateTime']['output']>>;
+  userId?: Maybe<FieldWrapper<Scalars['ID']['output']>>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  createLike: FieldWrapper<Like>;
   createPost: FieldWrapper<Post>;
+  deleteLike: FieldWrapper<Like>;
   deletePost: FieldWrapper<Post>;
   updatePost: FieldWrapper<Post>;
 };
 
 
+export type MutationCreateLikeArgs = {
+  data: CreateLikeInput;
+};
+
+
 export type MutationCreatePostArgs = {
   data: CreatePostInput;
+};
+
+
+export type MutationDeleteLikeArgs = {
+  data: CreateLikeInput;
 };
 
 
@@ -72,10 +98,28 @@ export type Post = {
 export type Query = {
   __typename?: 'Query';
   feedServiceHello: FieldWrapper<Scalars['String']['output']>;
+  getAllLike: Array<Maybe<FieldWrapper<Like>>>;
+  getAllLikeCount: FieldWrapper<Scalars['Int']['output']>;
   getAllPost: Array<Maybe<FieldWrapper<Post>>>;
   getAllPostCount: FieldWrapper<Scalars['Int']['output']>;
+  getOneLike?: Maybe<FieldWrapper<Like>>;
   getOnePost?: Maybe<FieldWrapper<Post>>;
   getPostById?: Maybe<FieldWrapper<Post>>;
+};
+
+
+export type QueryGetAllLikeArgs = {
+  filter?: InputMaybe<Scalars['JSON']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Scalars['JSON']['input']>;
+};
+
+
+export type QueryGetAllLikeCountArgs = {
+  filter?: InputMaybe<Scalars['JSON']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -91,6 +135,12 @@ export type QueryGetAllPostArgs = {
 export type QueryGetAllPostCountArgs = {
   filter?: InputMaybe<Scalars['JSON']['input']>;
   search?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryGetOneLikeArgs = {
+  filter?: InputMaybe<Scalars['JSON']['input']>;
+  sort?: InputMaybe<Scalars['JSON']['input']>;
 };
 
 
@@ -206,11 +256,13 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = ResolversObject<{
   CachePurgeInput: CachePurgeInput;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
-  CreatePostInput: CreatePostInput;
+  CreateLikeInput: CreateLikeInput;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
+  CreatePostInput: CreatePostInput;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']['output']>;
   JSON: ResolverTypeWrapper<Scalars['JSON']['output']>;
+  Like: ResolverTypeWrapper<ILikeDocument>;
   Mutation: ResolverTypeWrapper<{}>;
   Post: ResolverTypeWrapper<IPostDocument>;
   Query: ResolverTypeWrapper<{}>;
@@ -224,11 +276,13 @@ export type ResolversTypes = ResolversObject<{
 export type ResolversParentTypes = ResolversObject<{
   CachePurgeInput: CachePurgeInput;
   String: Scalars['String']['output'];
-  CreatePostInput: CreatePostInput;
+  CreateLikeInput: CreateLikeInput;
   ID: Scalars['ID']['output'];
+  CreatePostInput: CreatePostInput;
   DateTime: Scalars['DateTime']['output'];
   EmailAddress: Scalars['EmailAddress']['output'];
   JSON: Scalars['JSON']['output'];
+  Like: ILikeDocument;
   Mutation: {};
   Post: IPostDocument;
   Query: {};
@@ -237,6 +291,10 @@ export type ResolversParentTypes = ResolversObject<{
   User: User;
   Boolean: Scalars['Boolean']['output'];
 }>;
+
+export type AuthDirectiveArgs = { };
+
+export type AuthDirectiveResolver<Result, Parent, ContextType = FeedServiceContext, Args = AuthDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export type CachePurgeDirectiveArgs = {
   payloads: Array<CachePurgeInput>;
@@ -268,8 +326,20 @@ export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
   name: 'JSON';
 }
 
+export type LikeResolvers<ContextType = FeedServiceContext, ParentType extends ResolversParentTypes['Like'] = ResolversParentTypes['Like']> = ResolversObject<{
+  __resolveReference?: ReferenceResolver<Maybe<ResolversTypes['Like']>, { __typename: 'Like' } & GraphQLRecursivePick<UnwrappedObject<ParentType>, {"_id":true}>, ContextType>;
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  postId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  userId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type MutationResolvers<ContextType = FeedServiceContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+  createLike?: Resolver<ResolversTypes['Like'], ParentType, ContextType, RequireFields<MutationCreateLikeArgs, 'data'>>;
   createPost?: Resolver<ResolversTypes['Post'], ParentType, ContextType, RequireFields<MutationCreatePostArgs, 'data'>>;
+  deleteLike?: Resolver<ResolversTypes['Like'], ParentType, ContextType, RequireFields<MutationDeleteLikeArgs, 'data'>>;
   deletePost?: Resolver<ResolversTypes['Post'], ParentType, ContextType, RequireFields<MutationDeletePostArgs, '_id'>>;
   updatePost?: Resolver<ResolversTypes['Post'], ParentType, ContextType, RequireFields<MutationUpdatePostArgs, 'data'>>;
 }>;
@@ -289,8 +359,11 @@ export type PostResolvers<ContextType = FeedServiceContext, ParentType extends R
 
 export type QueryResolvers<ContextType = FeedServiceContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   feedServiceHello?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  getAllLike?: Resolver<Array<Maybe<ResolversTypes['Like']>>, ParentType, ContextType, Partial<QueryGetAllLikeArgs>>;
+  getAllLikeCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<QueryGetAllLikeCountArgs>>;
   getAllPost?: Resolver<Array<Maybe<ResolversTypes['Post']>>, ParentType, ContextType, Partial<QueryGetAllPostArgs>>;
   getAllPostCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<QueryGetAllPostCountArgs>>;
+  getOneLike?: Resolver<Maybe<ResolversTypes['Like']>, ParentType, ContextType, Partial<QueryGetOneLikeArgs>>;
   getOnePost?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, Partial<QueryGetOnePostArgs>>;
   getPostById?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryGetPostByIdArgs, '_id'>>;
 }>;
@@ -305,6 +378,7 @@ export type Resolvers<ContextType = FeedServiceContext> = ResolversObject<{
   DateTime?: GraphQLScalarType;
   EmailAddress?: GraphQLScalarType;
   JSON?: GraphQLScalarType;
+  Like?: LikeResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Post?: PostResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
@@ -312,6 +386,7 @@ export type Resolvers<ContextType = FeedServiceContext> = ResolversObject<{
 }>;
 
 export type DirectiveResolvers<ContextType = FeedServiceContext> = ResolversObject<{
+  auth?: AuthDirectiveResolver<any, any, ContextType>;
   cachePurge?: CachePurgeDirectiveResolver<any, any, ContextType>;
   cacheSet?: CacheSetDirectiveResolver<any, any, ContextType>;
   isMHAdmin?: IsMhAdminDirectiveResolver<any, any, ContextType>;

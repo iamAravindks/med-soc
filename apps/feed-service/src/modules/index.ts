@@ -11,6 +11,7 @@ import {
 import path from "path";
 import { TModule } from "../libs/types";
 import HelloDataSource from "./hello/hello.datasource";
+import LikeDataSource from "./like/like.datasource";
 import PostDataSource from "./post/post.datasource";
 
 const typeDefs = mergeTypeDefs(
@@ -28,6 +29,7 @@ export const Modules: TModule = {
   dataSources: {
     helloDataSource: new HelloDataSource(),
     postDataSource: new PostDataSource(),
+    likeDataSource: new LikeDataSource(),
   },
   schemas: cacheDirectiveTransformer(
     authDirectiveTransformer(

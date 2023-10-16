@@ -13,7 +13,6 @@ input CreatePostInput {
   title: String!
   content: String!
   imageUrl: String
-  creator: ID!
 }
 
 input UpdatePostInput {
@@ -40,9 +39,11 @@ extend type Query {
 
 extend type Mutation {
   createPost(data: CreatePostInput!): Post!
+    @auth
     @cachePurge(payloads: [{ types: ["getPost", "getAllPosts"] }])
 
   updatePost(data: UpdatePostInput!): Post!
+    @auth
     @cachePurge(
       payloads: [
         { types: ["getPost", "getAllPosts", "getPostById"], identifier: "_id" }
@@ -50,6 +51,7 @@ extend type Mutation {
     )
 
   deletePost(_id: ID!): Post!
+    @auth
     @cachePurge(
       payloads: [
         { types: ["getPost", "getAllPosts", "getPostById"], identifier: "_id" }

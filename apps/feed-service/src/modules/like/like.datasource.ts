@@ -1,22 +1,20 @@
 import { getSearchRegex, parseQuery } from "@hubspire/cache-directive";
-import { AccessMode, appMainSDK } from "@med-soc/codegen-sdk";
 import { GraphQLError } from "graphql";
-import { get, omit, set, size } from "lodash";
+import { size } from "lodash";
 import { PipelineStage } from "mongoose";
 import {
-  CreatePostInput,
-  FeedServiceContext,
-  QueryGetAllPostArgs,
-  QueryGetAllPostCountArgs,
-  QueryGetOnePostArgs,
-  UpdatePostInput,
+  CreateLikeInput,
+  QueryGetAllLikeArgs,
+  QueryGetAllLikeCountArgs,
+  QueryGetOneLikeArgs,
 } from "../../libs/types";
-import { PostModel } from "./post.model";
+import { PostModel } from "../post/post.model";
+import { LikeModel } from "./like.model";
 
-export default class PostDataSource {
-  private readonly model = PostModel;
+export default class LikeDataSource {
+  private readonly model = LikeModel;
 
-  async getAllPost(args: QueryGetAllPostArgs) {
+  async getAllLike(args: QueryGetAllLikeArgs) {
     const pipelines: PipelineStage[] = [];
     const limit = Number(args.limit) || 10;
     const offset = Number(args.offset) || 0;
@@ -44,7 +42,7 @@ export default class PostDataSource {
     return this.model.aggregate(pipelines);
   }
 
-  async getAllPostCount(args: QueryGetAllPostCountArgs) {
+  async getAllLikeCount(args: QueryGetAllLikeCountArgs) {
     const pipelines: PipelineStage[] = [];
 
     if (size(args.search?.trim()) > 2) {
@@ -67,41 +65,26 @@ export default class PostDataSource {
     return (await this.model.aggregate(pipelines))[0]?.totalCount || 0;
   }
 
-  async getPostById(_id: string) {
-    return this.model.findById(_id).lean();
-  }
-
-  async getOnePost(args: QueryGetOnePostArgs) {
+  async getOneLike(args: QueryGetOneLikeArgs) {
     return this.model.findOne(args.filter).sort(args.sort).lean();
   }
 
-  async createPost(data: CreatePostInput, context: FeedServiceContext) {
-    const creator = context.userId;
-    const post = new this.model({ ...data, creator });
-    return post.save();
+  async createLike(data: CreateLikeInput) {
+    const postExists = await PostModel.exists({ _id: data.postId });
+    if (!postExists) throw new GraphQLError("Post not found");
+    const LikedPost = await this.model.findOne({ ...data }).lean();
+    if (LikedPost) return LikedPost;
+    const like = new this.model({ ...data });
+    return like.save();
   }
 
-  async updatePost(data: UpdatePostInput) {
-    const post = await this.model.findById(data._id);
-    if (!post) throw new GraphQLError("post not found");
+  async deleteLike(data: CreateLikeInput) {
+    const postExists = await PostModel.exists({ _id: data.postId });
+    if (!postExists) throw new GraphQLError("Post not found");
+    const like = await this.model.findOne({ ...data });
+    if (!like) throw new GraphQLError("like not found");
 
-    for (const field in omit(data, "_id")) set(post, field, get(data, field));
-
-    return post.save();
-  }
-
-  async deletePost(_id: string) {
-    const post = await this.model.findById(_id);
-    if (!post) throw new GraphQLError("post not found");
-
-    await this.model.deleteOne({ _id });
-    return post;
-  }
-
-  async getAuthor(args: any, context: FeedServiceContext) {
-    const { sdk } = appMainSDK(AccessMode.User, context.accessToken as string);
-    const variables = { id: args._id };
-    const author = await sdk.GetUserById(variables);
-    return author?.getUserById;
+    await this.model.deleteOne({ ...data });
+    return like;
   }
 }
