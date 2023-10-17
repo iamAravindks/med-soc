@@ -12,7 +12,6 @@ import path from "path";
 import { authDirectiveTransformer } from "@med-soc/shared-backend";
 import { TModule } from "../libs/types";
 import AuthDataSource from "./auth/auth.datasource";
-import HelloDataSource from "./hello/hello.datasource";
 import UserDataSource from "./user/user.datasource";
 
 const typeDefs = mergeTypeDefs(
@@ -28,7 +27,6 @@ const resolvers = mergeResolvers(
 
 export const Modules: TModule = {
   dataSources: {
-    helloDataSource: new HelloDataSource(),
     userDataSource: new UserDataSource(),
     authDataSource: new AuthDataSource(),
   },

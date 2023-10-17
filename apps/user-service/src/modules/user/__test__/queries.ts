@@ -1,4 +1,9 @@
-import { CreateUserInput, UpdateUserInput } from "../../../libs/types";
+import {
+  CreateUserInput,
+  MutationResetPasswordArgs,
+  QueryLoginArgs,
+  UpdateUserInput,
+} from "@med-soc/codegen-sdk/dist/generated/sdk";
 
 export const getUserById = (_id: string) => {
   return {
@@ -14,8 +19,6 @@ password
 bio
 status
 imageUrl
-passwordResetToken
-passwordTokenExpires
         }
       }
       `,
@@ -45,8 +48,7 @@ password
 bio
 status
 imageUrl
-passwordResetToken
-passwordTokenExpires
+
         }
       }
   `,
@@ -74,8 +76,7 @@ password
 bio
 status
 imageUrl
-passwordResetToken
-passwordTokenExpires
+
         }
       }
   `,
@@ -90,7 +91,7 @@ export const getAllUserCount = (search: string, filter: any) => {
   return {
     query: `
       query getAllUserCount($search: String, $filter: JSON) {
-        getAllUserCount(filter: $filter, search: $search) 
+        getAllUserCount(filter: $filter, search: $search)
       }
   `,
     variables: {
@@ -105,17 +106,11 @@ export const createUser = (data: CreateUserInput) => {
     query: `
       mutation createUser($data: CreateUserInput!) {
         createUser(data: $data) {
-          _id
-          createdAt
-          updatedAt
           email
 name
-password
 bio
 status
 imageUrl
-passwordResetToken
-passwordTokenExpires
         }
       }
   `,
@@ -125,27 +120,20 @@ passwordTokenExpires
   };
 };
 
-export const createManyUser = (datas: CreateUserInput[]) => {
+export const loginUser = (data: QueryLoginArgs) => {
   return {
     query: `
-      mutation createManyUser($datas: [CreateUserInput!]!) {
-        createManyUser(datas: $datas) {
-          _id
-          createdAt
-          updatedAt
-          email
-name
-password
-bio
-status
-imageUrl
-passwordResetToken
-passwordTokenExpires
-        }
+    query Login($email: String!, $password: String!) {
+      login(email: $email, password: $password) {
+        token
+        refreshToken
+        userId
       }
-  `,
+    }
+    `,
     variables: {
-      datas: datas,
+      email: data.email,
+      password: data.password,
     },
   };
 };
@@ -156,46 +144,17 @@ export const updateUser = (data: UpdateUserInput) => {
       mutation updateUser($data: UpdateUserInput!) {
         updateUser(data: $data) {
           _id
-          createdAt
-          updatedAt
           email
 name
-password
 bio
 status
 imageUrl
-passwordResetToken
-passwordTokenExpires
+
         }
       }
   `,
     variables: {
       data: data,
-    },
-  };
-};
-
-export const updateManyUser = (datas: UpdateUserInput[]) => {
-  return {
-    query: `
-      mutation updateManyUser($datas: [UpdateUserInput!]!) {
-        updateManyUser(datas: $datas) {
-          _id
-          createdAt
-          updatedAt
-          email
-name
-password
-bio
-status
-imageUrl
-passwordResetToken
-passwordTokenExpires
-        }
-      }
-  `,
-    variables: {
-      datas: datas,
     },
   };
 };
@@ -206,16 +165,12 @@ export const deleteUser = (_id: string) => {
       mutation deleteUser($_id: ID!) {
         deleteUser(_id: $_id) {
           _id
-          createdAt
-          updatedAt
           email
 name
-password
 bio
 status
 imageUrl
-passwordResetToken
-passwordTokenExpires
+
         }
       }
   `,
@@ -224,28 +179,68 @@ passwordTokenExpires
     },
   };
 };
-
-export const deleteManyUser = (filter: any) => {
+export const currentUser = () => {
   return {
     query: `
-      mutation deleteManyUser($filter: JSON!) {
-        deleteManyUser(filter: $filter) {
-          _id
-          createdAt
-          updatedAt
-          email
-name
-password
-bio
-status
-imageUrl
-passwordResetToken
-passwordTokenExpires
-        }
+    query Current_user {
+      current_user {
+        _id
+        createdAt
+        updatedAt
+        email
+        name
+        bio
+        status
+        imageUrl
       }
-  `,
+    }`,
+  };
+};
+
+export const getProfile = () => {
+  return {
+    query: `
+    query GetProfile {
+      getProfile {
+        _id
+        createdAt
+        updatedAt
+        email
+        name
+        bio
+        status
+        imageUrl
+      }
+    }
+    `,
+  };
+};
+
+export const forgotPassword = (email: string) => {
+  return {
+    query: `
+    query Query($email: String!) {
+      forgotPassword(email: $email)
+    }`,
     variables: {
-      filter: filter,
+      email,
+    },
+  };
+};
+
+export const resetPassword = (data: MutationResetPasswordArgs) => {
+  return {
+    query: `
+    mutation ResetPassword($resetToken: String, $password: String) {
+      resetPassword(resetToken: $resetToken, password: $password) {
+        _id
+        email
+      }
+    }
+    `,
+    variables: {
+      password: data.password,
+      resetToken: data.resetToken,
     },
   };
 };

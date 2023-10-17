@@ -32,6 +32,11 @@ export type CachePurgeInput = {
   types: Array<Scalars['String']['input']>;
 };
 
+export type CreateLikeInput = {
+  postId: Array<Scalars['ID']['input']>;
+  userId: Array<Scalars['ID']['input']>;
+};
+
 export type CreatePostInput = {
   content: Scalars['String']['input'];
   creator: Scalars['ID']['input'];
@@ -48,15 +53,31 @@ export type CreateUserInput = {
   status?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type Like = {
+  __typename?: 'Like';
+  _id: Scalars['ID']['output'];
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  postId?: Maybe<Scalars['ID']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  userId?: Maybe<Scalars['ID']['output']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  createLike: Like;
   createPost: Post;
   createUser: User;
+  deleteLike: Like;
   deletePost: Post;
   deleteUser: User;
   resetPassword: User;
   updatePost: Post;
   updateUser: User;
+};
+
+
+export type MutationCreateLikeArgs = {
+  data: CreateLikeInput;
 };
 
 
@@ -67,6 +88,11 @@ export type MutationCreatePostArgs = {
 
 export type MutationCreateUserArgs = {
   data: CreateUserInput;
+};
+
+
+export type MutationDeleteLikeArgs = {
+  data: CreateLikeInput;
 };
 
 
@@ -98,6 +124,7 @@ export type MutationUpdateUserArgs = {
 export type Post = {
   __typename?: 'Post';
   _id: Scalars['ID']['output'];
+  author: User;
   content?: Maybe<Scalars['String']['output']>;
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   creator?: Maybe<Scalars['ID']['output']>;
@@ -111,10 +138,13 @@ export type Query = {
   current_user?: Maybe<User>;
   feedServiceHello: Scalars['String']['output'];
   forgotPassword: Scalars['String']['output'];
+  getAllLike: Array<Maybe<Like>>;
+  getAllLikeCount: Scalars['Int']['output'];
   getAllPost: Array<Maybe<Post>>;
   getAllPostCount: Scalars['Int']['output'];
   getAllUser: Array<Maybe<User>>;
   getAllUserCount: Scalars['Int']['output'];
+  getOneLike?: Maybe<Like>;
   getOnePost?: Maybe<Post>;
   getOneUser?: Maybe<User>;
   getPostById?: Maybe<Post>;
@@ -127,6 +157,21 @@ export type Query = {
 
 export type QueryForgotPasswordArgs = {
   email: Scalars['String']['input'];
+};
+
+
+export type QueryGetAllLikeArgs = {
+  filter?: InputMaybe<Scalars['JSON']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Scalars['JSON']['input']>;
+};
+
+
+export type QueryGetAllLikeCountArgs = {
+  filter?: InputMaybe<Scalars['JSON']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -157,6 +202,12 @@ export type QueryGetAllUserArgs = {
 export type QueryGetAllUserCountArgs = {
   filter?: InputMaybe<Scalars['JSON']['input']>;
   search?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryGetOneLikeArgs = {
+  filter?: InputMaybe<Scalars['JSON']['input']>;
+  sort?: InputMaybe<Scalars['JSON']['input']>;
 };
 
 

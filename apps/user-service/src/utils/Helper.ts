@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
+import { GQLError } from "@med-soc/shared-backend";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { UserModel } from "../modules/user/user.model";
-import { GQLError } from "./GQLError";
 
 export const getUserFromToken = async (token: string) => {
   try {

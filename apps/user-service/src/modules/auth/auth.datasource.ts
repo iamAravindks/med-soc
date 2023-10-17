@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+import { GQLError, throwAnError } from "@med-soc/shared-backend";
 import crypto from "crypto";
 import {
   MutationResetPasswordArgs,
@@ -6,7 +7,6 @@ import {
   QueryLoginArgs,
   UserServiceContext,
 } from "../../libs/types";
-import { GQLError, throwAnError } from "../../utils/GQLError";
 import { getToken } from "../../utils/token";
 import { loginValidation } from "../../utils/validation/validation";
 import { UserModel } from "../user/user.model";

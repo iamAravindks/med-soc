@@ -7,12 +7,14 @@ export enum ContextValueType {
   mhToken = "MH_TOKEN",
   authenticated = "AUTHENTICATED",
   unAuthenticated = "UNAUTHENTICATED",
+  userId = "USER_ID",
 }
 
 export const MockContextValue = (
   type: ContextValueType,
   cache: CacheService,
-  accessToken?: string
+  accessToken?: string,
+  userId?: string
 ): UserServiceContext => {
   switch (type) {
     case ContextValueType.mhToken:
@@ -27,6 +29,15 @@ export const MockContextValue = (
       return {
         isMHAdmin: false,
         accessToken,
+        cacheContext: { cache, sessionId: accessToken! },
+        dataSources: Modules.dataSources,
+        loaders: getLoaders(),
+      };
+    case ContextValueType.userId:
+      return {
+        isMHAdmin: true,
+        accessToken,
+        userId,
         cacheContext: { cache, sessionId: accessToken! },
         dataSources: Modules.dataSources,
         loaders: getLoaders(),
